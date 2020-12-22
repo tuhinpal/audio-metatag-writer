@@ -57,7 +57,7 @@ app.get('/id3', async function(req, res) {
     }
 });
 
-app.get('/delete'), (req, res) => {
+app.get('/delete', async function(req, res) {
 
     res.header('Access-Control-Allow-Origin', '*')
 
@@ -75,7 +75,7 @@ app.get('/delete'), (req, res) => {
     } else {
         res.send("Unauthorized")
     }
-}
+})
 
 app.get('/converter', (req, res) => {
 
