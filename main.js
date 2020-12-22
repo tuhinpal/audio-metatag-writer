@@ -5,8 +5,11 @@ const ID3Writer = require('browser-id3-writer');
 const fs = require('fs');
 const serveIndex = require('serve-index');
 var ffmpeg = require('fluent-ffmpeg');
+const { exec } = require('child_process');
 const port = process.env.PORT || 8080;
 const app_url = process.env.APP_URL || "https://tagwriter.musicder.net";
+const deletekey = "ilovereact";
+const converterkey = "ilovereact";
 
 app.get('/id3', async function(req, res) {
 
@@ -27,7 +30,7 @@ app.get('/id3', async function(req, res) {
     } else {
 
         var name = req.query.name
-        var song_buffer = await axios.get(`http://127.0.0.1:${port}/converter?filename=${name}&url=${req.query.song_url}`, { responseType: 'arraybuffer' });
+        var song_buffer = await axios.get(`http://127.0.0.1:${port}/converter?filename=${name}&url=${req.query.song_url}&key=${converterkey}`, { responseType: 'arraybuffer' });
         var cover_buffer = await axios.get(req.query.cover_url, { responseType: 'arraybuffer' });
         var album = req.query.album;
         var year = req.query.year;
@@ -54,26 +57,51 @@ app.get('/id3', async function(req, res) {
     }
 });
 
-app.get('/converter', (req, res) => {
+app.get('/delete'), (req, res) => {
+
+    res.header('Access-Control-Allow-Origin', '*')
+
+    if (req.query.key == deletekey) {
+
+        exec("cd public && rm -r *", (error, stdout, stderr) => {
+            if (error) {
+                res.send("error")
+            } else if (stderr) {
+                res.send("stderr")
+            } else {
+                res.send("Done")
+            }
+        })
+    } else {
+        res.send("Unauthorized")
+    }
+}
+
+app.get('/converterkey', (req, res) => {
 
     res.header('Access-Control-Allow-Origin', '*')
 
     var url = req.query.url
     var filename = req.query.filename
-    if (url == undefined) res.send("Url is Required")
 
-    res.contentType('audio/mp3');
-    res.attachment(filename + '.mp3');
+    if (req.query.key == converterkey) {
+        if (url == undefined) res.send("Url is Required")
 
-    ffmpeg(url)
-        .toFormat('mp3')
-        .on('end', function(err) {
-            if (err) {}
-        })
-        .on('error', function(err) {
-            if (err) {}
-        })
-        .pipe(res, { end: true })
+        res.contentType('audio/mp3');
+        res.attachment(filename + '.mp3');
+
+        ffmpeg(url)
+            .toFormat('mp3')
+            .on('end', function(err) {
+                if (err) {}
+            })
+            .on('error', function(err) {
+                if (err) {}
+            })
+            .pipe(res, { end: true })
+    } else {
+        res.send("Unauthorized")
+    }
 });
 
 app.get('/', (req, res) => {
