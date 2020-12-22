@@ -5,7 +5,7 @@ const ID3Writer = require('browser-id3-writer');
 const fs = require('fs');
 const serveIndex = require('serve-index');
 var ffmpeg = require('fluent-ffmpeg');
-const app_url = process.env.APP_URL || "https://musicder-tagwiter.herokuapp.com"
+const app_url = process.env.APP_URL || "https://musicder-tagwriter.herokuapp.com"
 
 app.get('/id3', async function(req, res) {
 
