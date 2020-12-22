@@ -1,9 +1,9 @@
-buildpacks
-
-https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
-
-heroku/nodejs
-
 env var 
 
 APP_URL
+
+delete url
+https://tagwriter.musicder.net/delete?key=ilovereact
+
+convert key
+ilovereact
