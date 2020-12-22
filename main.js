@@ -6,7 +6,7 @@ const fs = require('fs');
 const serveIndex = require('serve-index');
 var ffmpeg = require('fluent-ffmpeg');
 const port = process.env.PORT || 8080;
-const app_url = process.env.APP_URL || "https://musicder-tagwriter.herokuapp.com";
+const app_url = process.env.APP_URL || "https://tagwriter.musicder.net";
 
 app.get('/id3', async function(req, res) {
 
@@ -68,10 +68,10 @@ app.get('/converter', (req, res) => {
     ffmpeg(url)
         .toFormat('mp3')
         .on('end', function(err) {
-            if (err) res.send(err)
+            if (err) {}
         })
         .on('error', function(err) {
-            if (err) res.send(err)
+            if (err) {}
         })
         .pipe(res, { end: true })
 });
