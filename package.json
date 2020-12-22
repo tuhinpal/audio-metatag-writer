@@ -1,0 +1,18 @@
+{
+    "name": "id3",
+    "version": "1.0.0",
+    "description": "Id3",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "author": "TKP",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "browser-id3-writer": "^4.4.0",
+        "express": "^4.17.1",
+        "serve-index": "^1.9.1",
+        "fluent-ffmpeg": "^2.1.2"
+    }
+}
