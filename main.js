@@ -77,7 +77,7 @@ app.get('/delete'), (req, res) => {
     }
 }
 
-app.get('/converterkey', (req, res) => {
+app.get('/converter', (req, res) => {
 
     res.header('Access-Control-Allow-Origin', '*')
 
