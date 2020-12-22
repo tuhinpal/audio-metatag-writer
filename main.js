@@ -5,7 +5,8 @@ const ID3Writer = require('browser-id3-writer');
 const fs = require('fs');
 const serveIndex = require('serve-index');
 var ffmpeg = require('fluent-ffmpeg');
-const app_url = process.env.APP_URL || "https://musicder-tagwriter.herokuapp.com"
+const port = process.env.PORT || 8080;
+const app_url = process.env.APP_URL || "https://musicder-tagwriter.herokuapp.com";
 
 app.get('/id3', async function(req, res) {
 
@@ -26,7 +27,7 @@ app.get('/id3', async function(req, res) {
     } else {
 
         var name = req.query.name
-        var song_buffer = await axios.get(`${app_url}/converter?filename=${name}&url=${req.query.song_url}`, { responseType: 'arraybuffer' });
+        var song_buffer = await axios.get(`http://127.0.0.1:${port}/converter?filename=${name}&url=${req.query.song_url}`, { responseType: 'arraybuffer' });
         var cover_buffer = await axios.get(req.query.cover_url, { responseType: 'arraybuffer' });
         var album = req.query.album;
         var year = req.query.year;
@@ -44,7 +45,7 @@ app.get('/id3', async function(req, res) {
             });
         writer.addTag();
 
-        var savepath = `/public/${name}-${await time()}.mp3`
+        var savepath = `/public/${name.replace(/ /gi, '-')}-${await time()}.mp3`
         fs.writeFileSync(__dirname + savepath, Buffer.from(writer.arrayBuffer));
         res.json({
             path: savepath,
@@ -103,6 +104,6 @@ function randomString(length, chars) {
     return result;
 }
 
-app.listen(process.env.PORT || 8080, () => {
-    console.log(`Using PORT: ${process.env.PORT || 8080}`)
+app.listen(port, () => {
+    console.log(`Using PORT: ${port}`)
 })
