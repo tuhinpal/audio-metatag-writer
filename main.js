@@ -3,7 +3,8 @@ const app = express();
 const axios = require('axios');
 const ID3Writer = require('browser-id3-writer');
 const fs = require('fs');
-const serveIndex = require('serve-index');
+var contentDisposition = require('content-disposition');
+var serveStatic = require('serve-static');
 var ffmpeg = require('fluent-ffmpeg');
 const { exec } = require('child_process');
 const port = process.env.PORT || 8080;
@@ -109,7 +110,12 @@ app.get('/', (req, res) => {
     res.send(`I am <a href="https://github.com/cachecleanerjeet/musicder">Musicder</a>'s Metatag writer. I firstly convert a file to mp3 and afterthat add Metatags.<br><a href="https://github.com/cachecleanerjeet">Made by Tuhin</a>`)
 });
 
-app.use('/public', express.static('public'), serveIndex('public', { 'icons': true }))
+app.use('/public', (serveStatic('public', { 'index': false, 'setHeaders': setHeaders })))
+
+function setHeaders(res, path) {
+    res.setHeader('Content-Disposition', contentDisposition(path))
+}
+
 
 async function time() {
     return axios({

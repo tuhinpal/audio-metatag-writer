@@ -11,8 +11,9 @@
     "dependencies": {
         "axios": "^0.21.1",
         "browser-id3-writer": "^4.4.0",
+        "content-disposition": "^0.5.3",
         "express": "^4.17.1",
-        "serve-index": "^1.9.1",
-        "fluent-ffmpeg": "^2.1.2"
+        "fluent-ffmpeg": "^2.1.2",
+        "serve-static": "^1.14.1"
     }
 }
