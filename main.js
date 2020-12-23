@@ -16,17 +16,17 @@ app.get('/id3', async function(req, res) {
     res.header('Access-Control-Allow-Origin', '*')
 
     if (req.query.name == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else if (req.query.song_url == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else if (req.query.cover_url == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else if (req.query.album == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else if (req.query.year == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else if (req.query.artist == undefined) {
-        res.send("Not Allowed")
+        res.status(403).send("Not Allowed")
     } else {
 
         var name = req.query.name
@@ -50,7 +50,7 @@ app.get('/id3', async function(req, res) {
 
         var savepath = `/public/${name.replace(/ /gi, '-')}-${await time()}.mp3`
         fs.writeFileSync(__dirname + savepath, Buffer.from(writer.arrayBuffer));
-        res.json({
+        res.status(200).json({
             path: savepath,
             url: app_url + savepath
         })
