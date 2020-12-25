@@ -3,39 +3,48 @@ const app = express();
 const axios = require('axios');
 const ID3Writer = require('browser-id3-writer');
 const fs = require('fs');
-var contentDisposition = require('content-disposition');
-var serveStatic = require('serve-static');
-var ffmpeg = require('fluent-ffmpeg');
+const contentDisposition = require('content-disposition');
+const serveStatic = require('serve-static');
+const ffmpeg = require('fluent-ffmpeg');
 const { exec } = require('child_process');
 const port = process.env.PORT || 8080;
+const cors = require('cors');
+const bodyparser = require('body-parser')
 const app_url = process.env.APP_URL || "https://tagwriter.musicder.net";
 const deletekey = "ilovereact";
 const converterkey = "ilovereact";
 
-app.get('/id3', async function(req, res) {
+app.use(cors({
+    origin: 'https://musicder.net',
+    optionsSuccessStatus: 200
+}))
 
-    res.header('Access-Control-Allow-Origin', '*')
+app.use(bodyparser.urlencoded({ extended: false }))
+app.use(bodyparser.json())
 
-    if (req.query.name == undefined) {
+
+app.post('/id3', async function(req, res) {
+
+    if (req.body.name == undefined) {
         res.status(403).send("Not Allowed")
-    } else if (req.query.song_url == undefined) {
+    } else if (req.body.song_url == undefined) {
         res.status(403).send("Not Allowed")
-    } else if (req.query.cover_url == undefined) {
+    } else if (req.body.cover_url == undefined) {
         res.status(403).send("Not Allowed")
-    } else if (req.query.album == undefined) {
+    } else if (req.body.album == undefined) {
         res.status(403).send("Not Allowed")
-    } else if (req.query.year == undefined) {
+    } else if (req.body.year == undefined) {
         res.status(403).send("Not Allowed")
-    } else if (req.query.artist == undefined) {
+    } else if (req.body.artist == undefined) {
         res.status(403).send("Not Allowed")
     } else {
 
-        var name = req.query.name
-        var song_buffer = await axios.get(`http://127.0.0.1:${port}/converter?filename=${name}&url=${req.query.song_url}&key=${converterkey}`, { responseType: 'arraybuffer' });
-        var cover_buffer = await axios.get(req.query.cover_url, { responseType: 'arraybuffer' });
-        var album = req.query.album;
-        var year = req.query.year;
-        var artist = req.query.artist;
+        var name = req.body.name
+        var song_buffer = await axios.get(`http://127.0.0.1:${port}/converter?filename=${name}&url=${req.body.song_url}&key=${converterkey}`, { responseType: 'arraybuffer' });
+        var cover_buffer = await axios.get(req.body.cover_url, { responseType: 'arraybuffer' });
+        var album = req.body.album;
+        var year = req.body.year;
+        var artist = req.body.artist;
 
         const writer = new ID3Writer(song_buffer.data);
         writer.setFrame('TIT2', name)
@@ -60,8 +69,6 @@ app.get('/id3', async function(req, res) {
 
 app.get('/delete', async function(req, res) {
 
-    res.header('Access-Control-Allow-Origin', '*')
-
     if (req.query.key == deletekey) {
 
         exec("cd public && rm -r *", (error, stdout, stderr) => {
@@ -79,8 +86,6 @@ app.get('/delete', async function(req, res) {
 })
 
 app.get('/converter', (req, res) => {
-
-    res.header('Access-Control-Allow-Origin', '*')
 
     var url = req.query.url
     var filename = req.query.filename
@@ -106,7 +111,7 @@ app.get('/converter', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*')
+
     res.send(`I am <a href="https://github.com/cachecleanerjeet/musicder">Musicder</a>'s Metatag writer. I firstly convert a file to mp3 and afterthat add Metatags.<br><a href="https://github.com/cachecleanerjeet">Made by Tuhin</a>`)
 });
 
