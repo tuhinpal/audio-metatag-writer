@@ -58,7 +58,7 @@ app.post('/id3', async function(req, res) {
             });
         writer.addTag();
 
-        var savepath = `/public/${name.replace(/ /gi, '-').replace(/#/gi, '').replace(/?/gi, '')}-${await time()}.mp3`
+        var savepath = `/public/${name.replace(/ /gi, '-').split("?").join("").split(":").join("").replace(/#/gi, '').replace(/;/gi, '')}-${await time()}.mp3`
         fs.writeFileSync(__dirname + savepath, Buffer.from(writer.arrayBuffer));
         res.status(200).json({
             path: savepath,
