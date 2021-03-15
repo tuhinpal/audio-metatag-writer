@@ -15,7 +15,7 @@ const deletekey = "ilovereact";
 const converterkey = "ilovereact";
 
 app.use(cors({
-    origin: 'https://musicder.net',
+    origin: '*',
     optionsSuccessStatus: 200
 }))
 
@@ -109,6 +109,24 @@ app.get('/converter', (req, res) => {
         res.send("Unauthorized")
     }
 });
+
+app.get('/gaana', (req, res) => {
+
+    res.contentType('audio/mpeg');
+    res.attachment('audio.mp3');
+
+    ffmpeg(req.body.url)
+        .toFormat('mp3')
+        .on('end', function(err) {
+            if (err) {}
+        })
+        .on('error', function(err) {
+            if (err) {}
+        })
+        .pipe(res, { end: true })
+
+});
+
 
 app.get('/', (req, res) => {
 
