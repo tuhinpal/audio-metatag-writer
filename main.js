@@ -110,7 +110,7 @@ app.get('/converter', (req, res) => {
     }
 });
 
-app.get('/gaana', (req, res) => {
+app.post('/gaana', (req, res) => {
 
     res.contentType('audio/mpeg');
     res.attachment('audio.mp3');
