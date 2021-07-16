@@ -5,13 +5,13 @@ import string
 from unidecode import unidecode
 from mutagen.mp4 import MP4Cover, MP4
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 # get the app url from the environment variable
-app_url = os.environ.get('APP_URL')
-
-if app_url is None:
-    app_url = 'http://localhost:8080'
+app_url = os.environ.get('APP_URL', 'http://localhost:8080')
+port = int(os.environ.get('PORT', 8080))
 
 
 @app.route('/id3', methods=['GET', 'POST'])
@@ -48,6 +48,10 @@ def send_js(path):
     return send_from_directory('public', path)
 
 
+# if __name__ == '__main__':
+#     app.debug = True
+#     app.run(host='0.0.0.0', port=port, use_reloader=True, threaded=True)
+
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0', port=8080, use_reloader=True, threaded=True)
+    app.debug = False
+    app.run(host='0.0.0.0', port=port)
