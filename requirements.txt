@@ -3,3 +3,4 @@ requests
 Flask
 unidecode
 flask_cors
+schedule

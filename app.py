@@ -6,11 +6,12 @@ from unidecode import unidecode
 from mutagen.mp4 import MP4Cover, MP4
 import os
 from flask_cors import CORS
+import schedule
 
 app = Flask(__name__)
 CORS(app)
 # get the app url from the environment variable
-app_url = os.environ.get('APP_URL', 'http://localhost:8080')
+app_url = os.environ.get('APP_URL', 'https://tagwriter.musicder.net')
 port = int(os.environ.get('PORT', 8080))
 
 
@@ -47,6 +48,14 @@ def index():
 def send_js(path):
     return send_from_directory('public', path)
 
+
+def deletecache():
+    dir = './public'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
+
+
+schedule.every(2).hours.do(deletecache)
 
 # if __name__ == '__main__':
 #     app.debug = True
