@@ -52,6 +52,7 @@ def send_js(path):
 #     app.debug = True
 #     app.run(host='0.0.0.0', port=port, use_reloader=True, threaded=True)
 
+# Production
 if __name__ == '__main__':
     app.debug = False
     app.run(host='0.0.0.0', port=port)
