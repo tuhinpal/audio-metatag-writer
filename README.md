@@ -26,3 +26,7 @@ Please learn about `Docker` 🤷‍♂
 ### Credits
 
 Thanks to [Sumanjay](https://github.com/cyberboysumanjay) for `mutagen` suggestion.
+
+### Note
+
+I'm not a python dev. I used python because there are no way (atleast IDK) instead of using ffmpeg if I use node, and that is very resources consuming. So Sumanjay Bhai suggest me to use mutagen and I used it. Fell free to optimize my noob code. Thank you !
